@@ -1,0 +1,34 @@
+repos:
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        args:
+          - --max-line-length=88
+          - --ignore=E203,W503
+
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        language_version: python3
+        args:
+          - --line-length=88
+
+  # Pytest as a local hook
+  - repo: local
+    hooks:
+      - id: pytest
+        name: "Run Pytest"
+        entry: pytest --maxfail=1 --disable-warnings -q
+        language: system
+        types: [python]
+
+  # Coverage using pre-commit-hooks repository (correct coverage hook)
+  - repo: https://github.com/pre-commit/mirrors-flake8
+    rev: v5.0.0  # Correct version for coverage
+    hooks:
+      - id: coverage
+        name: "Check coverage >= 90%"
+        entry: coverage run -m pytest && coverage report --fail-under=90
+        language: pythonSto
